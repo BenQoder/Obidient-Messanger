@@ -1,0 +1,13 @@
+CREATE OR REPLACE FUNCTION GET_RANDOM_NUMBER() RETURNS 
+SETOF "PHONENUMBERS" LANGUAGE SQL AS 
+	$$
+	UPDATE "phoneNumbers"
+	SET
+	    messaged_on = CURRENT_TIME(2)
+	WHERE id = (
+	        SELECT id
+	        FROM "phoneNumbers"
+	        ORDER BY RANDOM()
+	        LIMIT 1
+	    ) RETURNING *;
+	$$;

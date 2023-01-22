@@ -13,7 +13,11 @@ export default function AppLayout() {
   return (
     <>
       <IconRegistry icons={EvaIconsPack} />
-      <ApplicationProvider {...eva} theme={{ ...eva.light, ...theme }}>
+      <ApplicationProvider
+        {...eva}
+        theme={{ ...eva.light, ...theme }}
+        // customMapping={mapping}
+      >
         <SafeAreaProvider>
           <Slot />
         </SafeAreaProvider>

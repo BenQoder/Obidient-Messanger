@@ -109,7 +109,7 @@ export default function Page() {
             }}
           >
             <Text allowFontScaling={false} category="h6">
-              Obi-Datti Messenger
+              Obi | Datti Messenger
             </Text>
 
             <Spacer height={2} />

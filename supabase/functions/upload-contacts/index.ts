@@ -5,9 +5,13 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
-console.log("Hello from Functions!")
+import { corsHeaders } from '../_shared/cors.ts'
 
 serve(async (req) => {
+  if (req.method === 'OPTIONS') {
+    return new Response('ok', { headers: corsHeaders })
+  }
+
   try {
     // Create a Supabase client with the Auth context of the logged in user.
     const supabaseClient = createClient(

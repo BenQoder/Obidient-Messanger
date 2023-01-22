@@ -13,7 +13,7 @@ export default function AppLayout() {
   return (
     <>
       <IconRegistry icons={EvaIconsPack} />
-      <ApplicationProvider
+ <ApplicationProvider
         {...eva}
         theme={{ ...eva.light, ...theme }}
         // customMapping={mapping}

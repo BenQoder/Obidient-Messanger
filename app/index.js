@@ -5,11 +5,13 @@ import { useCallback, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as Linking from "expo-linking";
 import Spacer from "../components/spacer";
+import { TouchableWithoutFeedback } from "@ui-kitten/components/devsupport";
 
 export default function Page() {
   const anonKey = process.env.ANON_KEY;
   const [contact, setContact] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [showContactModal, setShowContactModal] = useState(false);
 
   const theme = useTheme();
 
@@ -157,7 +159,10 @@ export default function Page() {
             </View>
             {!contact ? (
               <>
-                <Button onPress={getRandomContact}>Get Random Contact</Button>
+                {/* <Button onPress={getRandomContact}>Get Random Contact</Button> */}
+                <Button onPress={() => setShowContactModal(!showContactModal)}>
+                  Get Random Contacts
+                </Button>
               </>
             ) : (
               <>
@@ -210,14 +215,25 @@ export default function Page() {
             )}
           </View>
         </View>
+
+        {showContactModal && getContactsModal()}
       </SafeAreaView>
     </Layout>
   );
 }
 
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     // padding: 24,
-//   },
-// });
+const getContactsModal = () => (
+  <View
+    style={{
+      flex: 1,
+      justifyContent: "flex-end",
+      borderTopLeftRadius: 5,
+      borderTopRightRadius: 5,
+    }}
+  >
+    <TouchableWithoutFeedback />
+    <Layout style={{ minHeight: 100 }}>
+      <Text status="danger">I'm a modal</Text>
+    </Layout>
+  </View>
+);

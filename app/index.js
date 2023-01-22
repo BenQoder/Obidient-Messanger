@@ -141,8 +141,25 @@ export default function Page() {
             ) : (
               <>
                 <Text>Contact: {contact.number}</Text>
-                <Button onPress={shareToWhatsApp}>Share Whatsapp</Button>
-                <Button onPress={shareToSMS}>Share SMS</Button>
+                <Spacer height={5} />
+
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    overflow: "hidden",
+                  }}
+                >
+                  <View style={{ width: "48%" }}>
+                    <Button onPress={shareToWhatsApp}>Share Whatsapp</Button>
+                  </View>
+
+                  <View style={{ width: "48%" }}>
+                    <Button onPress={shareToSMS} appearance="outline">
+                      Share SMS
+                    </Button>
+                  </View>
+                </View>
               </>
             )}
           </View>

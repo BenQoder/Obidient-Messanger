@@ -1,14 +1,19 @@
-import { Button, Layout, Text } from "@ui-kitten/components";
+import { Button, Divider, Layout, Text, useTheme } from "@ui-kitten/components";
 import { Image, Platform, StyleSheet, View } from "react-native";
 import * as Contacts from "expo-contacts";
 import { useCallback, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as Linking from "expo-linking";
+import Spacer from "../components/spacer";
+import { TouchableWithoutFeedback } from "@ui-kitten/components/devsupport";
 
 export default function Page() {
   const anonKey = process.env.ANON_KEY;
   const [contact, setContact] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [showContactModal, setShowContactModal] = useState(false);
+
+  const theme = useTheme();
 
   const uploadContacts = useCallback(async () => {
     const { status } = await Contacts.requestPermissionsAsync();
@@ -86,40 +91,149 @@ export default function Page() {
   };
 
   return (
-    <Layout style={styles.container}>
+    <Layout style={{ flex: 1 }}>
       <SafeAreaView>
-        <Image
-          source={require("../assets/lp-logo-large.png")}
-          style={{ width: 80, height: 80 }}
-        />
-        <Text category="h4">Hello </Text>
-        <Text category="p1">This is the first page of your app.</Text>
+        <View
+          style={{
+            // justifyContent: "center",
+            marginTop: 30,
+            flexDirection: "row",
+            // flex: 1,
+            paddingHorizontal: 15,
+            alignItems: "center",
+          }}
+        >
+          <Image
+            source={require("../assets/lp-logo-large.png")}
+            style={{ width: 60, height: 60 }}
+          />
 
-        {Platform.OS != "web" && (
-          <>
-            <Button onPress={uploadContacts}>Upload Contacts</Button>
-          </>
-        )}
+          <Spacer width={5} />
 
-        {!contact ? (
-          <>
-            <Button onPress={getRandomContact}>Get Random Contact</Button>
-          </>
-        ) : (
-          <>
-            <Text>Contact: {contact.number}</Text>
-            <Button onPress={shareToWhatsApp}>Share Whatsapp</Button>
-            <Button onPress={shareToSMS}>Share SMS</Button>
-          </>
-        )}
+          <View style={{ flex: 1 }}>
+            <Text category="h6">Join the {`\n`}movement</Text>
+          </View>
+        </View>
+
+        <View style={{ paddingHorizontal: 15, marginTop: 30 }}>
+          <View
+            style={{
+              paddingBottom: 15,
+            }}
+          >
+            <Text allowFontScaling={false} category="h6">
+              Obi | Datti Messenger
+            </Text>
+
+            <Spacer height={2} />
+
+            <Text allowFontScaling={false} category="s1">
+              Obidents this is your new campaign messenger, mobilize and remind
+              other obidients to vote Labour party.
+            </Text>
+          </View>
+
+          <Divider style={{}} />
+
+          <View
+            style={{
+              marginTop: 10,
+              overflow: "hidden",
+            }}
+          >
+            <View
+              style={{
+                padding: 15,
+                backgroundColor: "#0f1218",
+                borderRadius: 5,
+                marginBottom: 10,
+                borderWidth: 1,
+                borderStyle: "dotted",
+                borderColor: theme["color-primary-500"],
+              }}
+            >
+              <Text style={{ color: "#fff" }} category="s1">
+                Clicking on get random contact will select random contacts you
+                can quickly message.
+              </Text>
+            </View>
+            {!contact ? (
+              <>
+                {/* <Button onPress={getRandomContact}>Get Random Contact</Button> */}
+                <Button onPress={() => setShowContactModal(!showContactModal)}>
+                  Get Random Contacts
+                </Button>
+              </>
+            ) : (
+              <>
+                <Text>Contact: {contact.number}</Text>
+                <Spacer height={5} />
+
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    overflow: "hidden",
+                  }}
+                >
+                  <View style={{ width: "48%" }}>
+                    <Button onPress={shareToWhatsApp}>Share Whatsapp</Button>
+                  </View>
+
+                  <View style={{ width: "48%" }}>
+                    <Button onPress={shareToSMS} appearance="outline">
+                      Share SMS
+                    </Button>
+                  </View>
+                </View>
+              </>
+            )}
+
+            <Spacer height={10} />
+
+            <View
+              style={{
+                padding: 15,
+                backgroundColor: "#0f1218",
+                borderRadius: 5,
+                marginBottom: 10,
+                borderWidth: 1,
+                borderStyle: "dotted",
+                borderColor: theme["color-primary-500"],
+              }}
+            >
+              <Text style={{ color: "#fff" }} category="s1">
+                Clicking on upload contact will randomly upload 50 contacts from
+                your contact list.
+              </Text>
+            </View>
+
+            {Platform.OS != "web" && (
+              <>
+                <Button onPress={uploadContacts}>Upload Contacts</Button>
+              </>
+            )}
+          </View>
+        </View>
+
+        {showContactModal && getContactsModal()}
       </SafeAreaView>
     </Layout>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 24,
-  },
-});
+const getContactsModal = () => (
+  <View
+    style={{
+      flex: 1,
+      justifyContent: "flex-end",
+      borderTopLeftRadius: 5,
+      borderTopRightRadius: 5,
+    }}
+  >
+    <TouchableWithoutFeedback />
+    <Layout style={{ minHeight: 100 }}>
+      <Text status="danger">I'm a modal</Text>
+    </Layout>
+  </View>
+);

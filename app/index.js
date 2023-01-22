@@ -4,6 +4,7 @@ import * as Contacts from "expo-contacts";
 import { useCallback, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as Linking from "expo-linking";
+import Spacer from "../components/spacer";
 
 export default function Page() {
   const anonKey = process.env.ANON_KEY;
@@ -86,40 +87,74 @@ export default function Page() {
   };
 
   return (
-    <Layout style={styles.container}>
-      <SafeAreaView>
+    <Layout style={{ flex: 1 }}>
+      <View
+        style={{
+          justifyContent: "center",
+          flex: 1,
+          alignItems: "center",
+        }}
+      >
         <Image
           source={require("../assets/lp-logo-large.png")}
-          style={{ width: 80, height: 80 }}
+          style={{ width: 100, height: 100 }}
         />
-        <Text category="h4">Hello </Text>
-        <Text category="p1">This is the first page of your app.</Text>
+      </View>
 
-        {Platform.OS != "web" && (
-          <>
-            <Button onPress={uploadContacts}>Upload Contacts</Button>
-          </>
-        )}
+      <SafeAreaView>
+        <View style={{ paddingHorizontal: 15 }}>
+          <View
+            style={{
+              paddingBottom: 10,
+            }}
+          >
+            <Text allowFontScaling={false} category="h6">
+              Obi-Datti Messenger
+            </Text>
 
-        {!contact ? (
-          <>
-            <Button onPress={getRandomContact}>Get Random Contact</Button>
-          </>
-        ) : (
-          <>
-            <Text>Contact: {contact.number}</Text>
-            <Button onPress={shareToWhatsApp}>Share Whatsapp</Button>
-            <Button onPress={shareToSMS}>Share SMS</Button>
-          </>
-        )}
+            <Spacer height={2} />
+
+            <Text allowFontScaling={false} category="s1">
+              Obidents this is your new campaign messenger, mobilize and remind
+              other obidients to vote Labour Party.
+            </Text>
+          </View>
+
+          <View
+            style={{
+              marginTop: 10,
+              overflow: "hidden",
+            }}
+          >
+            {Platform.OS != "web" && (
+              <>
+                <Button onPress={uploadContacts}>Upload Contacts</Button>
+              </>
+            )}
+
+            <View style={{ height: 5 }} />
+
+            {!contact ? (
+              <>
+                <Button onPress={getRandomContact}>Get Random Contact</Button>
+              </>
+            ) : (
+              <>
+                <Text>Contact: {contact.number}</Text>
+                <Button onPress={shareToWhatsApp}>Share Whatsapp</Button>
+                <Button onPress={shareToSMS}>Share SMS</Button>
+              </>
+            )}
+          </View>
+        </View>
       </SafeAreaView>
     </Layout>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 24,
-  },
-});
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     // padding: 24,
+//   },
+// });

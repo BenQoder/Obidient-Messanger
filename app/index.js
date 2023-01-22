@@ -1,4 +1,4 @@
-import { Button, Layout, Text } from "@ui-kitten/components";
+import { Button, Divider, Layout, Text, useTheme } from "@ui-kitten/components";
 import { Image, Platform, StyleSheet, View } from "react-native";
 import * as Contacts from "expo-contacts";
 import { useCallback, useEffect, useState } from "react";
@@ -10,6 +10,8 @@ export default function Page() {
   const anonKey = process.env.ANON_KEY;
   const [contact, setContact] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  const theme = useTheme();
 
   const uploadContacts = useCallback(async () => {
     const { status } = await Contacts.requestPermissionsAsync();
@@ -88,24 +90,33 @@ export default function Page() {
 
   return (
     <Layout style={{ flex: 1 }}>
-      <View
-        style={{
-          justifyContent: "center",
-          flex: 1,
-          alignItems: "center",
-        }}
-      >
-        <Image
-          source={require("../assets/lp-logo-large.png")}
-          style={{ width: 100, height: 100 }}
-        />
-      </View>
-
       <SafeAreaView>
-        <View style={{ paddingHorizontal: 15 }}>
+        <View
+          style={{
+            // justifyContent: "center",
+            marginTop: 30,
+            flexDirection: "row",
+            // flex: 1,
+            paddingHorizontal: 15,
+            alignItems: "center",
+          }}
+        >
+          <Image
+            source={require("../assets/lp-logo-large.png")}
+            style={{ width: 60, height: 60 }}
+          />
+
+          <Spacer width={5} />
+
+          <View style={{ flex: 1 }}>
+            <Text category="h6">Join the {`\n`}movement</Text>
+          </View>
+        </View>
+
+        <View style={{ paddingHorizontal: 15, marginTop: 30 }}>
           <View
             style={{
-              paddingBottom: 10,
+              paddingBottom: 15,
             }}
           >
             <Text allowFontScaling={false} category="h6">
@@ -116,9 +127,11 @@ export default function Page() {
 
             <Text allowFontScaling={false} category="s1">
               Obidents this is your new campaign messenger, mobilize and remind
-              other obidients to vote Labour Party.
+              other obidients to vote Labour party.
             </Text>
           </View>
+
+          <Divider style={{}} />
 
           <View
             style={{
@@ -126,14 +139,22 @@ export default function Page() {
               overflow: "hidden",
             }}
           >
-            {Platform.OS != "web" && (
-              <>
-                <Button onPress={uploadContacts}>Upload Contacts</Button>
-              </>
-            )}
-
-            <View style={{ height: 5 }} />
-
+            <View
+              style={{
+                padding: 15,
+                backgroundColor: "#0f1218",
+                borderRadius: 5,
+                marginBottom: 10,
+                borderWidth: 1,
+                borderStyle: "dotted",
+                borderColor: theme["color-primary-500"],
+              }}
+            >
+              <Text style={{ color: "#fff" }} category="s1">
+                Clicking on get random contact will select random contacts you
+                can quickly message.
+              </Text>
+            </View>
             {!contact ? (
               <>
                 <Button onPress={getRandomContact}>Get Random Contact</Button>
@@ -160,6 +181,31 @@ export default function Page() {
                     </Button>
                   </View>
                 </View>
+              </>
+            )}
+
+            <Spacer height={10} />
+
+            <View
+              style={{
+                padding: 15,
+                backgroundColor: "#0f1218",
+                borderRadius: 5,
+                marginBottom: 10,
+                borderWidth: 1,
+                borderStyle: "dotted",
+                borderColor: theme["color-primary-500"],
+              }}
+            >
+              <Text style={{ color: "#fff" }} category="s1">
+                Clicking on upload contact will randomly upload 50 contacts from
+                your contact list.
+              </Text>
+            </View>
+
+            {Platform.OS != "web" && (
+              <>
+                <Button onPress={uploadContacts}>Upload Contacts</Button>
               </>
             )}
           </View>

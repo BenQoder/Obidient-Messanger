@@ -145,7 +145,7 @@ export default function Page() {
                     }}
                   >
                     <Text appearance="alternative" category="s1">
-                      When you click "Get Contact" Button, you will be randomly
+                      When you click "Get Contact" button, you will be randomly
                       assigned a contact from the database, you can then send
                       them a campaign message via WhatsApp or SMS.
                     </Text>
@@ -153,8 +153,8 @@ export default function Page() {
                     <Text style={{ color: "#fff" }} category="s1">
                       The idea is to reach out to as many Nigerians as possible,
                       free via WhatsApp or without conventional SMS Gateways,
-                      and to remind them to vote Labour Party and Join the
-                      Obidents Movement.
+                      and to remind them to vote Labour party and join the
+                      bbidents Movement.
                     </Text>
                   </View>
                   <Button onPress={getRandomContact}>Get Contact</Button>
@@ -181,7 +181,7 @@ export default function Page() {
                 </Text>
                 <Spacer height={10} />
                 <Text style={{ color: "#fff" }} category="s1">
-                  Note: This App will not upload your contact names or any other
+                  Note: This app will not upload your contact names or any other
                   information, only phone numbers.{`\n`}To avoid numbers from
                   being assigned to multiple participants, we will mark the
                   numbers as used after they have been assigned and all contacts
@@ -238,8 +238,8 @@ const ContactsModal = ({ contact }) => {
   return (
     <Layout
       style={{
-        borderTopLeftRadius: 5,
-        borderTopRightRadius: 5,
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10,
         minHeight: 300,
         padding: 15,
       }}
@@ -256,7 +256,7 @@ const ContactsModal = ({ contact }) => {
           }}
         >
           <View style={{ width: "48%" }}>
-            <Button onPress={shareToWhatsApp} status="success">
+            <Button onPress={shareToWhatsApp} status="primary">
               Share Whatsapp
             </Button>
           </View>
@@ -266,7 +266,7 @@ const ContactsModal = ({ contact }) => {
               // accessoryLeft={<MessageDots color="orange" />}
               onPress={shareToSMS}
               appearance="outline"
-              status="success"
+              status="primary"
             >
               Share SMS
             </Button>

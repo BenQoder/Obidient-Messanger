@@ -1,17 +1,18 @@
 import { Button, Divider, Layout, Text, useTheme } from "@ui-kitten/components";
-import { Image, Platform, StyleSheet, View } from "react-native";
+import { Image, Platform, ScrollView, View } from "react-native";
 import * as Contacts from "expo-contacts";
 import { useCallback, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as Linking from "expo-linking";
 import Spacer from "../components/spacer";
-import { TouchableWithoutFeedback } from "@ui-kitten/components/devsupport";
+import Modal from "react-native-modal";
+import Whatsapp from "../components/WhatsAppIcon";
+import MessageDots from "../components/MessageDotsIcon";
 
 export default function Page() {
   const anonKey = process.env.ANON_KEY;
   const [contact, setContact] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [showContactModal, setShowContactModal] = useState(false);
 
   const theme = useTheme();
 
@@ -78,21 +79,9 @@ export default function Page() {
     setContact(json.data[0] ?? null);
   };
 
-  const shareToSMS = async () => {
-    await Linking.openURL(
-      `sms:${contact.number}?=Here is the Peter Obi, message`
-    );
-  };
-
-  const shareToWhatsApp = async () => {
-    await Linking.openURL(
-      `whatsapp://send?phone=${contact.number}&text=Here is the Peter Obi, message`
-    );
-  };
-
   return (
     <Layout style={{ flex: 1 }}>
-      <SafeAreaView>
+      <SafeAreaView style={{ flex: 1 }} edges={["top", "bottom"]}>
         <View
           style={{
             // justifyContent: "center",
@@ -115,7 +104,7 @@ export default function Page() {
           </View>
         </View>
 
-        <View style={{ paddingHorizontal: 15, marginTop: 30 }}>
+        <View style={{ paddingHorizontal: 15, marginTop: 30, flex: 1 }}>
           <View
             style={{
               paddingBottom: 15,
@@ -129,111 +118,161 @@ export default function Page() {
 
             <Text allowFontScaling={false} category="s1">
               Obidents this is your new campaign messenger, mobilize and remind
-              other obidients to vote Labour party.
+              other Nigerians to vote Labour party.
             </Text>
           </View>
 
           <Divider style={{}} />
 
-          <View
-            style={{
-              marginTop: 10,
-              overflow: "hidden",
-            }}
-          >
+          <ScrollView style={{ flex: 1 }}>
             <View
               style={{
-                padding: 15,
-                backgroundColor: "#0f1218",
-                borderRadius: 5,
-                marginBottom: 10,
-                borderWidth: 1,
-                borderStyle: "dotted",
-                borderColor: theme["color-primary-500"],
+                marginTop: 10,
+                overflow: "hidden",
               }}
             >
-              <Text style={{ color: "#fff" }} category="s1">
-                Clicking on get random contact will select random contacts you
-                can quickly message.
-              </Text>
-            </View>
-            {!contact ? (
-              <>
-                {/* <Button onPress={getRandomContact}>Get Random Contact</Button> */}
-                <Button onPress={() => setShowContactModal(!showContactModal)}>
-                  Get Random Contacts
-                </Button>
-              </>
-            ) : (
-              <>
-                <Text>Contact: {contact.number}</Text>
-                <Spacer height={5} />
-
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    overflow: "hidden",
-                  }}
-                >
-                  <View style={{ width: "48%" }}>
-                    <Button onPress={shareToWhatsApp}>Share Whatsapp</Button>
+              {!contact && (
+                <>
+                  <View
+                    style={{
+                      padding: 15,
+                      backgroundColor: "#0f1218",
+                      borderRadius: 5,
+                      marginBottom: 10,
+                      borderWidth: 1,
+                      borderStyle: "dotted",
+                      borderColor: theme["color-primary-500"],
+                    }}
+                  >
+                    <Text appearance="alternative" category="s1">
+                      When you click "Get Contact" Button, you will be randomly
+                      assigned a contact from the database, you can then send
+                      them a campaign message via WhatsApp or SMS.
+                    </Text>
+                    <Spacer height={10} />
+                    <Text style={{ color: "#fff" }} category="s1">
+                      The idea is to reach out to as many Nigerians as possible,
+                      free via WhatsApp or without conventional SMS Gateways,
+                      and to remind them to vote Labour Party and Join the
+                      Obidents Movement.
+                    </Text>
                   </View>
+                  <Button onPress={getRandomContact}>Get Contact</Button>
+                </>
+              )}
 
-                  <View style={{ width: "48%" }}>
-                    <Button onPress={shareToSMS} appearance="outline">
-                      Share SMS
-                    </Button>
-                  </View>
-                </View>
-              </>
-            )}
+              <Spacer height={30} />
 
-            <Spacer height={10} />
+              <View
+                style={{
+                  padding: 15,
+                  backgroundColor: "#0f1218",
+                  borderRadius: 5,
+                  marginBottom: 10,
+                  borderWidth: 1,
+                  borderStyle: "dotted",
+                  borderColor: theme["color-primary-500"],
+                }}
+              >
+                <Text style={{ color: "#fff" }} category="s1">
+                  By clicking the button below, you will be uploading 50 phone
+                  numbers from your phone to the database, The contact will be
+                  randomly assigned to participants of the campaign.
+                </Text>
+                <Spacer height={10} />
+                <Text style={{ color: "#fff" }} category="s1">
+                  Note: This App will not upload your contact names or any other
+                  information, only phone numbers.{`\n`}To avoid numbers from
+                  being assigned to multiple participants, we will mark the
+                  numbers as used after they have been assigned and all contacts
+                  will be deleted after the election.
+                </Text>
+              </View>
 
-            <View
-              style={{
-                padding: 15,
-                backgroundColor: "#0f1218",
-                borderRadius: 5,
-                marginBottom: 10,
-                borderWidth: 1,
-                borderStyle: "dotted",
-                borderColor: theme["color-primary-500"],
-              }}
-            >
-              <Text style={{ color: "#fff" }} category="s1">
-                Clicking on upload contact will randomly upload 50 contacts from
-                your contact list.
-              </Text>
+              {Platform.OS != "web" && (
+                <>
+                  <Button onPress={uploadContacts}>Upload Contacts</Button>
+                </>
+              )}
             </View>
-
-            {Platform.OS != "web" && (
-              <>
-                <Button onPress={uploadContacts}>Upload Contacts</Button>
-              </>
-            )}
-          </View>
+          </ScrollView>
         </View>
-
-        {showContactModal && getContactsModal()}
       </SafeAreaView>
+      <Modal
+        hasBackdrop
+        style={{
+          margin: 0,
+          justifyContent: "flex-end",
+          backgroundColor: "rgba(0,0,0,0.7)",
+        }}
+        visible={!!contact}
+        onBackdropPress={() => setContact(null)}
+        onBackButtonPress={() => setContact(null)}
+      >
+        <ContactsModal contact={contact} />
+      </Modal>
     </Layout>
   );
 }
 
-const getContactsModal = () => (
-  <View
-    style={{
-      flex: 1,
-      justifyContent: "flex-end",
-      borderTopLeftRadius: 5,
-      borderTopRightRadius: 5,
-    }}
-  >
-    <TouchableWithoutFeedback />
-    <Layout style={{ minHeight: 100 }}>
-      <Text status="danger">I'm a modal</Text>
+const ContactsModal = ({ contact }) => {
+  const shareToSMS = async () => {
+    await Linking.openURL(
+      `sms:${contact.number}${Platform.select({
+        default: "?body=",
+        ios: "&body=",
+      })}Here is the Peter Obi, message`
+    );
+  };
+
+  const shareToWhatsApp = async () => {
+    await Linking.openURL(
+      `whatsapp://send?phone=${contact.number}&text=Here is the Peter Obi, message`
+    );
+  };
+
+  if (!contact) {
+    return <View />;
+  }
+
+  return (
+    <Layout
+      style={{
+        borderTopLeftRadius: 5,
+        borderTopRightRadius: 5,
+        minHeight: 300,
+        padding: 15,
+      }}
+    >
+      <SafeAreaView edges={["bottom"]}>
+        <Text>Contact: {contact.number}</Text>
+        <Spacer height={5} />
+
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            overflow: "hidden",
+          }}
+        >
+          <View style={{ width: "48%" }}>
+            <Button onPress={shareToWhatsApp} status="success">
+              Share Whatsapp
+            </Button>
+          </View>
+
+          <View style={{ width: "48%" }}>
+            <Button
+              // accessoryLeft={<MessageDots color="orange" />}
+              onPress={shareToSMS}
+              appearance="outline"
+              status="success"
+            >
+              Share SMS
+            </Button>
+          </View>
+        </View>
+      </SafeAreaView>
     </Layout>
-  </View>
-);
+  );
+};

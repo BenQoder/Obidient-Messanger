@@ -6,8 +6,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import * as Linking from "expo-linking";
 import Spacer from "../components/spacer";
 import Modal from "react-native-modal";
-import Whatsapp from "../components/WhatsAppIcon";
-import MessageDots from "../components/MessageDotsIcon";
+import parsePhoneNumber from "libphonenumber-js";
 
 export default function Page() {
   const anonKey = process.env.ANON_KEY;
@@ -124,7 +123,10 @@ export default function Page() {
 
           <Divider style={{}} />
 
-          <ScrollView style={{ flex: 1 }}>
+          <ScrollView
+            style={{ flex: 1 }}
+            contentContainerStyle={{ paddingBottom: 80 }}
+          >
             <View
               style={{
                 marginTop: 10,
@@ -163,34 +165,35 @@ export default function Page() {
 
               <Spacer height={30} />
 
-              <View
-                style={{
-                  padding: 15,
-                  backgroundColor: "#0f1218",
-                  borderRadius: 5,
-                  marginBottom: 10,
-                  borderWidth: 1,
-                  borderStyle: "dotted",
-                  borderColor: theme["color-primary-500"],
-                }}
-              >
-                <Text style={{ color: "#fff" }} category="s1">
-                  By clicking the button below, you will be uploading 50 phone
-                  numbers from your phone to the database, The contact will be
-                  randomly assigned to participants of the campaign.
-                </Text>
-                <Spacer height={10} />
-                <Text style={{ color: "#fff" }} category="s1">
-                  Note: This app will not upload your contact names or any other
-                  information, only phone numbers.{`\n`}To avoid numbers from
-                  being assigned to multiple participants, we will mark the
-                  numbers as used after they have been assigned and all contacts
-                  will be deleted after the election.
-                </Text>
-              </View>
-
               {Platform.OS != "web" && (
                 <>
+                  <View
+                    style={{
+                      padding: 15,
+                      backgroundColor: "#0f1218",
+                      borderRadius: 5,
+                      marginBottom: 10,
+                      borderWidth: 1,
+                      borderStyle: "dotted",
+                      borderColor: theme["color-primary-500"],
+                    }}
+                  >
+                    <Text style={{ color: "#fff" }} category="s1">
+                      By clicking the button below, you will be uploading 50
+                      phone numbers from your phone to the database, The contact
+                      will be randomly assigned to participants of the campaign.
+                    </Text>
+                    <Spacer height={10} />
+                    <Text style={{ color: "#fff" }} category="s1">
+                      Note: This App will not upload your contact names or any
+                      other information, only phone numbers.{`\n`}To avoid
+                      numbers from being assigned to multiple participants, we
+                      will mark the numbers as used after they have been
+                      assigned and all contacts will be deleted after the
+                      election.
+                    </Text>
+                  </View>
+
                   <Button onPress={uploadContacts}>Upload Contacts</Button>
                 </>
               )}
@@ -219,16 +222,23 @@ const ContactsModal = ({ contact }) => {
   const shareToSMS = async () => {
     await Linking.openURL(
       `sms:${contact.number}${Platform.select({
-        default: "?body=",
-        ios: "&body=",
-      })}Here is the Peter Obi, message`
+        default: "?",
+        ios: "&",
+      })}body=${encodeURIComponent(message)}`
     );
   };
 
+  const message = `Under APC and PDP leadership, schools have been closing irregularly, homelessness is on the rise and cost of living have skyrocketed, businesses are closing and we still do not have constant power supply. It's time for a change.
+ 
+Vote and Support Labour party (LP) and the Obi-Datti Movement, let's give nigeria another chance.`;
+
   const shareToWhatsApp = async () => {
-    await Linking.openURL(
-      `whatsapp://send?phone=${contact.number}&text=Here is the Peter Obi, message`
-    );
+    const number = parsePhoneNumber(contact.number, "NG");
+    if (number.isValid()) {
+      await Linking.openURL(
+        `whatsapp://send?phone=${number.number}&text=${message}`
+      );
+    }
   };
 
   if (!contact) {
@@ -245,8 +255,12 @@ const ContactsModal = ({ contact }) => {
       }}
     >
       <SafeAreaView edges={["bottom"]}>
-        <Text>Contact: {contact.number}</Text>
+        <Text category="s1">Contact: {contact.number}</Text>
         <Spacer height={5} />
+        <Text category="s1">Message: </Text>
+        <Text category="s1">{message}</Text>
+
+        <Spacer height={30} />
 
         <View
           style={{

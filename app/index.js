@@ -147,14 +147,16 @@ export default function Page() {
                     }}
                   >
                     <Text appearance="alternative" category="s1">
-                      When you click "Get Contact" button, you will be randomly
-                      assigned a contact from the database, you can then send
-                      them a campaign message via WhatsApp or SMS.
+                      When you click the "Get Contact" button, you will be
+                      randomly assigned a contact from the database, you can
+                      then send them a campaign message via WhatsApp or SMS.
                     </Text>
+
                     <Spacer height={10} />
+
                     <Text style={{ color: "#fff" }} category="s1">
                       The idea is to reach out to as many Nigerians as possible,
-                      free via WhatsApp or without conventional SMS Gateways,
+                      free via WhatsApp or without conventional SMS gateways,
                       and to remind them to vote Labour party and join the
                       bbidents Movement.
                     </Text>
@@ -180,10 +182,12 @@ export default function Page() {
                   >
                     <Text style={{ color: "#fff" }} category="s1">
                       By clicking the button below, you will be uploading 50
-                      phone numbers from your phone to the database, The contact
+                      phone numbers from your phone to the database, the contact
                       will be randomly assigned to participants of the campaign.
                     </Text>
+
                     <Spacer height={10} />
+
                     <Text style={{ color: "#fff" }} category="s1">
                       Note: This App will not upload your contact names or any
                       other information, only phone numbers.{`\n`}To avoid
@@ -255,9 +259,11 @@ Vote and Support Labour party (LP) and the Obi-Datti Movement, let's give nigeri
       }}
     >
       <SafeAreaView edges={["bottom"]}>
-        <Text category="s1">Contact: {contact.number}</Text>
+        <Text category="s1">
+          Contact: <Text status="primary">{contact.number}</Text>
+        </Text>
         <Spacer height={5} />
-        <Text category="s1">Message: </Text>
+        <Text category="s1">Campaign message: </Text>
         <Text category="s1">{message}</Text>
 
         <Spacer height={30} />
@@ -271,7 +277,7 @@ Vote and Support Labour party (LP) and the Obi-Datti Movement, let's give nigeri
         >
           <View style={{ width: "48%" }}>
             <Button onPress={shareToWhatsApp} status="primary">
-              Share Whatsapp
+              Send via Whatsapp
             </Button>
           </View>
 
@@ -282,7 +288,7 @@ Vote and Support Labour party (LP) and the Obi-Datti Movement, let's give nigeri
               appearance="outline"
               status="primary"
             >
-              Share SMS
+              Send via SMS
             </Button>
           </View>
         </View>

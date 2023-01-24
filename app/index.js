@@ -1,7 +1,7 @@
 import { Button, Divider, Layout, Text, useTheme } from "@ui-kitten/components";
 import { Image, Platform, ScrollView, View } from "react-native";
 import * as Contacts from "expo-contacts";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as Linking from "expo-linking";
 import Spacer from "../components/spacer";

@@ -303,7 +303,6 @@ const ContactsModal = ({ contact }) => {
   };
 
   const message = useMemo(() => {
-    console.log(randomIndex);
     return messages[randomIndex];
   }, [randomIndex]);
 

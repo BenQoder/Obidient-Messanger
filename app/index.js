@@ -18,6 +18,7 @@ import parsePhoneNumber from "libphonenumber-js";
 export default function Page() {
   const anonKey = process.env.ANON_KEY;
   const [contact, setContact] = useState(null);
+  const [canShowModal, setCanShowModal] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
   const theme = useTheme();
@@ -151,35 +152,62 @@ export default function Page() {
                 overflow: "hidden",
               }}
             >
-              {!contact && (
+              {canShowModal ? (
                 <>
-                  <View
-                    style={{
-                      padding: 15,
-                      backgroundColor: "#0f1218",
-                      borderRadius: 5,
-                      marginBottom: 10,
-                      borderWidth: 1,
-                      borderStyle: "dotted",
-                      borderColor: theme["color-primary-500"],
-                    }}
-                  >
-                    <Text appearance="alternative" category="s1">
-                      When you click "Get Contact" Button, you will be randomly
-                      assigned a contact from the database, you can then send
-                      them a campaign message via WhatsApp or SMS.
-                    </Text>
-                    <Spacer height={10} />
-                    <Text style={{ color: "#fff" }} category="s1">
-                      The idea is to reach out to as many Nigerians as possible,
-                      free via WhatsApp or without conventional SMS Gateways,
-                      and to remind them to vote Labour Party and Join the
-                      Obidents Movement.
-                    </Text>
-                  </View>
-                  <Button onPress={getRandomContact} disabled={isLoading}>
-                    Get Contact
-                  </Button>
+                  {!contact && (
+                    <>
+                      <View
+                        style={{
+                          padding: 15,
+                          backgroundColor: "#0f1218",
+                          borderRadius: 5,
+                          marginBottom: 10,
+                          borderWidth: 1,
+                          borderStyle: "dotted",
+                          borderColor: theme["color-primary-500"],
+                        }}
+                      >
+                        <Text appearance="alternative" category="s1">
+                          When you click "Get Contact" Button, you will be
+                          randomly assigned a contact from the database, you can
+                          then send them a campaign message via WhatsApp or SMS.
+                        </Text>
+                        <Spacer height={10} />
+                        <Text style={{ color: "#fff" }} category="s1">
+                          The idea is to reach out to as many Nigerians as
+                          possible, free via WhatsApp or without conventional
+                          SMS Gateways, and to remind them to vote Labour Party
+                          and Join the Obidents Movement.
+                        </Text>
+                      </View>
+                      <Button onPress={getRandomContact} disabled={isLoading}>
+                        Get Contact
+                      </Button>
+                    </>
+                  )}
+                </>
+              ) : (
+                <>
+                  {!contact && (
+                    <>
+                      <View
+                        style={{
+                          padding: 15,
+                          backgroundColor: "#0f1218",
+                          borderRadius: 5,
+                          marginBottom: 10,
+                          borderWidth: 1,
+                          borderStyle: "dotted",
+                          borderColor: theme["color-primary-500"],
+                        }}
+                      >
+                        <Text appearance="alternative" category="s1">
+                          To avoid spamming, Please come back later to get
+                          another contact.
+                        </Text>
+                      </View>
+                    </>
+                  )}
                 </>
               )}
 
@@ -231,8 +259,14 @@ export default function Page() {
           backgroundColor: "rgba(0,0,0,0.7)",
         }}
         visible={!!contact}
-        onBackdropPress={() => setContact(null)}
-        onBackButtonPress={() => setContact(null)}
+        onBackdropPress={() => {
+          setCanShowModal(false);
+          setContact(null);
+        }}
+        onBackButtonPress={() => {
+          setCanShowModal(false);
+          setContact(null);
+        }}
       >
         <ContactsModal contact={contact} />
       </Modal>

@@ -331,7 +331,7 @@ const ContactsModal = ({ contact }) => {
       <SafeAreaView edges={["bottom"]}>
         <Text category="s1">Contact: {contact.number}</Text>
         <Spacer height={5} />
-        <Text category="s1">Message: </Text>
+        <Text category="s1">Campaign Message: </Text>
         <Text category="s1">{message}</Text>
         <Spacer height={10} />
         <Button onPress={() => setRandomIndex(Math.floor(Math.random() * 9))}>
